@@ -1,30 +1,33 @@
 import os
-from flask import Flask, request, render_template_string
+from flask import Flask, request, jsonify, send_file
 import joblib
 import numpy as np
 
 app = Flask(__name__)
 
-# Load trained model
+# تحميل النموذج
 model = joblib.load("house_model.pkl")
 
-# Load index.html as string
-with open("index.html", "r") as f:
-    index_html = f.read()
-
-@app.route("/", methods=["GET", "POST"])
+# الصفحة الرئيسية -> عرض index.html
+@app.route("/")
 def home():
-    prediction = None
-    if request.method == "POST":
+    return send_file("index.html")
+
+# التوقع
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
         area = float(request.form["area"])
         rooms = int(request.form["rooms"])
         bathrooms = int(request.form["bathrooms"])
 
-        input_data = np.array([[area, rooms, bathrooms]])
-        prediction = model.predict(input_data)[0]
-        prediction = round(prediction, 2)
+        features = np.array([[area, rooms, bathrooms]])
+        prediction = model.predict(features)[0]
 
-    return render_template_string(index_html, prediction=prediction)
+        return jsonify({"predicted_price": round(prediction, 2)})
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
