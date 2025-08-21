@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI House Price Prediction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>🏠 House Price Prediction</h2>
+        <form method="POST">
+            <label>Area (m²):</label>
+            <input type="number" name="area" required><br>
+
+            <label>Number of Rooms:</label>
+            <input type="number" name="rooms" required><br>
+
+            <label>Number of Bathrooms:</label>
+            <input type="number" name="bathrooms" required><br>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            💰 Estimated Price: <strong>${{ prediction }}</strong>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
