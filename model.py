@@ -1,24 +1,25 @@
-import pandas as pd
+import numpy as np
 from sklearn.linear_model import LinearRegression
 import joblib
 
-# Sample dataset (can be replaced with real estate dataset)
-data = {
-    "area": [50, 60, 80, 100, 120, 150],
-    "rooms": [2, 2, 3, 3, 4, 5],
-    "bathrooms": [1, 1, 2, 2, 2, 3],
-    "price": [50000, 60000, 90000, 110000, 150000, 200000]
-}
+# بيانات تدريب بسيطة (مساحة، عدد الغرف، عدد الحمامات) -> السعر
+X = np.array([
+    [100, 3, 1],
+    [150, 4, 2],
+    [200, 5, 2],
+    [250, 6, 3],
+    [300, 7, 3],
+    [120, 3, 2],
+    [180, 4, 2],
+    [220, 5, 3],
+])
 
-df = pd.DataFrame(data)
+y = np.array([100000, 150000, 200000, 250000, 300000, 130000, 180000, 230000])
 
-X = df[["area", "rooms", "bathrooms"]]
-y = df["price"]
-
-# Train model
+# إنشاء النموذج وتدريبه
 model = LinearRegression()
 model.fit(X, y)
 
-# Save model
+# حفظ النموذج
 joblib.dump(model, "house_model.pkl")
-print("Model trained and saved successfully!")
+print("✅ Model trained and saved as house_model.pkl")
